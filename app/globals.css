@@ -3,27 +3,43 @@
 @tailwind utilities;
 
 :root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
+  --background-start-rgb: 227, 226, 223;
   --background-end-rgb: 255, 255, 255;
+  --background: rgb(239, 238, 235);
+  --primary-color: rgb(227, 226, 223);
+  --accent-color: rgb(0, 255, 196);
+  --text-color: rgb(249, 249, 249);
+}
+
+:root[data-theme=dark] {
+  --background-start-rgb: 0, 0, 0;
+  --background-end-rgb: 28, 29, 32;
+  --background: rgb(16, 17, 20);
+  --primary-color: rgb(28, 29, 32);
+  --accent-color: rgb(0, 255, 196);
+  --text-color: rgb(249, 249, 249);
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --foreground-rgb: 255, 255, 255;
     --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
+    --background-end-rgb: 28, 29, 32;
+    --background: rgb(16, 17, 20);
+    --primary-color: rgb(28, 29, 32);
+    --accent-color: rgb(0, 255, 196);
+    --text-color: rgb(249, 249, 249);
   }
 }
 
 body {
-  color: rgb(var(--foreground-rgb));
+  color: var(--text-color);
   background: linear-gradient(
       to bottom,
       transparent,
       rgb(var(--background-end-rgb))
     )
     rgb(var(--background-start-rgb));
+  min-height: 100vh;
 }
 
 @layer utilities {
