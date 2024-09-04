@@ -31,7 +31,7 @@ yarn add sass --dev
 ```
 
 ```shell
-npx supabase gen types --lang=typescript --project-id "sorokysgnndouusfitkj" --schema public > types/supabase.types.ts
+npx supabase gen types --lang=typescript --project-id "project-id" --schema public > types/supabase.types.ts
 ```
 
 
