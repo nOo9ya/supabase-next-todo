@@ -1,4 +1,5 @@
 {
+  "tabWidth": 2,
   "tailwindConfig": "tailwind.config.ts",
   "tailwindAttributes": ["class", "className"],
   "tailwindFunctions": ["cl", "clsx", "tw"],

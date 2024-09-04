@@ -3,21 +3,23 @@
 @tailwind utilities;
 
 :root {
-  --background-start-rgb: 227, 226, 223;
+  --background-start-rgb: 255, 255, 255;
   --background-end-rgb: 255, 255, 255;
-  --background: rgb(239, 238, 235);
+  --background: rgb(255, 255, 235);
   --primary-color: rgb(227, 226, 223);
-  --accent-color: rgb(0, 255, 196);
-  --text-color: rgb(249, 249, 249);
+  --accent-color: rgb(28, 29, 32);
+  --text-color: rgb(28, 29, 32);
+  --btn-text-color: rgb(249, 249, 249);
 }
 
-:root[data-theme=dark] {
+:root.dark {
   --background-start-rgb: 0, 0, 0;
   --background-end-rgb: 28, 29, 32;
   --background: rgb(16, 17, 20);
   --primary-color: rgb(28, 29, 32);
   --accent-color: rgb(0, 255, 196);
   --text-color: rgb(249, 249, 249);
+  --btn-text-color: rgb(28, 29, 32);
 }
 
 @media (prefers-color-scheme: dark) {
