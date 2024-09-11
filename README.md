@@ -35,6 +35,24 @@ npx supabase gen types --lang=typescript --project-id "project-id" --schema publ
 ```
 
 
+## 구글 로그인 API
+1. Google Cloud API Oauth setting [GoogleAPI](https://cloud.google.com/apis)
+2. Auth UI 
+ - @supabase/auth-ui-react
+ - @supabase/auth-ui-shared
+3. Callback Handle
+
+---
+### Sessions
+#### implicit flow 
+- 암시적 흐름 
+- 브라우저 단 로그인 
+- 서버 불필요
+- 토큰을 브라우저에서 가지고 있어서 불안함 존재(access_token, refresh_token)
+#### PKCE flow 
+- 서버 측 로그인 후 -> 브라우저
+
+---
 
 
 

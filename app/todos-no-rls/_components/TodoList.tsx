@@ -1,18 +1,17 @@
-import React, { Fragment } from "react";
+import React from "react";
 import TodoListItem from "./TodoListItem";
-import { Database } from "@/types/supabase.types";
 
-type TodoDto = Database["public"]["Tables"]["todos_no_rls"]["Row"];
+import { IHandleTodos, TodoDto } from "@/types/todos/todosNoRls.types";
 
 const TodoList = ({
-  todos,
-  onUpdated = (id: number, content: string) => {},
-  onDeleted = (id: number) => {},
-}: {
-  todos: TodoDto[];
-}) => {
+  todos = [],
+  onUpdated,
+  onCompleted,
+  onUnCompleted,
+  onDeleted,
+}: Omit<IHandleTodos, "todo" | "onSearch" | "onCreated">) => {
   return (
-    <Fragment>
+    <>
       <ul id="todoList" className={"mt-6 flex flex-col gap-4"}>
         {todos.map((todo: TodoDto) => {
           return (
@@ -20,12 +19,14 @@ const TodoList = ({
               key={todo?.id}
               todo={todo}
               onUpdated={onUpdated}
+              onCompleted={onCompleted}
+              onUnCompleted={onUnCompleted}
               onDeleted={onDeleted}
             />
           );
         })}
       </ul>
-    </Fragment>
+    </>
   );
 };
 

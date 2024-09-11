@@ -7,28 +7,28 @@ import {
   HiOutlineCog6Tooth,
   HiOutlineTrash,
 } from "react-icons/hi2";
+import { IHandleTodos } from "@/types/todos/todosNoRls.types";
 
-import { Database } from "@/types/supabase.types";
-
-type TodoDto = Database["public"]["Tables"]["todos_no_rls"]["Row"];
-
-interface TodoListItemProps {
-  todo: TodoDto;
-  onUpdated: (id: number, userInput: string) => {};
-  onDeleted: (id: number) => {};
-}
-
-const TodoListItem = ({ todo, onUpdated, onDeleted }: TodoListItemProps) => {
+const TodoListItem = ({
+  todo,
+  onUpdated,
+  onCompleted,
+  onUnCompleted,
+  onDeleted,
+}: Omit<IHandleTodos, "todos" | "onSearch" | "onCreated">) => {
   const [isEdit, setIsEdit] = useState(false);
   const [userInput, setUserInput] = useState(todo?.content ?? "");
+  const [todoCompleted, setTodoCompleted] = useState<boolean>(
+    !!todo?.completed_at,
+  );
   const inputRef = useRef<HTMLInputElement>(null);
 
-  // isEdit가 true로 변경될 때 input에 포커스 주기
+  // isEdit 가 true 로 변경될 때 input 에 포커스 주기
   useEffect(() => {
     if (isEdit && inputRef.current) {
-      inputRef.current.focus(); // input에 포커스 주기
+      inputRef.current.focus(); // input 에 포커스 주기
     }
-  }, [isEdit]); // isEdit가 변경될 때마다 실행
+  }, [isEdit]); // isEdit 가 변경될 때마다 실행
 
   const activeEdit = () => {
     setIsEdit(true);
@@ -37,6 +37,22 @@ const TodoListItem = ({ todo, onUpdated, onDeleted }: TodoListItemProps) => {
   const editHandler = () => {
     onUpdated(todo.id, userInput);
     setIsEdit(false);
+  };
+
+  const handleBlur = () => {
+    onUpdated(todo.id, userInput);
+    setIsEdit(false);
+  };
+
+  const completeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+    console.log(e.target.checked);
+    if (e.target.checked) {
+      onCompleted(todo.id);
+      setTodoCompleted(true);
+    } else {
+      onUnCompleted(todo.id);
+      setTodoCompleted(false);
+    }
   };
 
   const deleteHandler = () => {
@@ -54,6 +70,8 @@ const TodoListItem = ({ todo, onUpdated, onDeleted }: TodoListItemProps) => {
         id={`todo-${todo?.id}`}
         name={`todo-${todo?.id}`}
         className={"peer/completed hidden"}
+        onChange={(e) => completeHandler(e)}
+        checked={todoCompleted}
       />
       <label
         htmlFor={`todo-${todo?.id}`}
@@ -63,7 +81,6 @@ const TodoListItem = ({ todo, onUpdated, onDeleted }: TodoListItemProps) => {
       >
         <HiCheck className={"stroke-2"} />
       </label>
-
       {isEdit ? (
         <input
           ref={inputRef}
@@ -73,6 +90,7 @@ const TodoListItem = ({ todo, onUpdated, onDeleted }: TodoListItemProps) => {
           onChange={(e) => {
             setUserInput(e.target.value);
           }}
+          onBlur={handleBlur}
         ></input>
       ) : (
         <p
@@ -81,10 +99,9 @@ const TodoListItem = ({ todo, onUpdated, onDeleted }: TodoListItemProps) => {
             "flex-1 peer-checked/completed:text-neutral-500 peer-checked/completed:line-through"
           }
         >
-          {todo?.content}
+          {userInput ?? todo?.content}
         </p>
       )}
-
       <div className="flex cursor-pointer flex-row items-center justify-center gap-1">
         <button
           className={"border-0 bg-transparent p-0.5 text-[var(--text-color)]"}

@@ -1,17 +1,19 @@
-"use client";
+"use server";
 
-import { createSupabaseBrowserClient } from "@/lib/client/supabase";
+import {
+  createServerSideClientRSC,
+  createServerSideClient,
+} from "@/lib/server/supabase";
 
-// get todosList
 export const getTodos = async () => {
-  const supabase = createSupabaseBrowserClient();
+  const supabase = await createServerSideClient();
 
   if (!supabase) {
     throw new Error("Failed to create Supabase client");
   }
 
   const { data, error } = await supabase
-    .from("todos_no_rls")
+    .from("todos_with_rls")
     .select("*")
     .is("deleted_at", null)
     .order("id", { ascending: false });
@@ -25,13 +27,13 @@ export const getTodos = async () => {
 };
 
 // getById todo
-export const getTodoById = async (id: number) => {
-  const supabase = createSupabaseBrowserClient();
+export const getTodoById = async (userId: string) => {
+  const supabase = await createServerSideClient(true);
   const { data, error } = await supabase
-    .from("todos_no_rls")
+    .from("todos_with_rls")
     .select("*")
     .is("deleted_at", null)
-    .eq("id", id);
+    .eq("user_id", userId);
 
   if (error) {
     console.error("Error fetching todo:", error);
@@ -43,9 +45,9 @@ export const getTodoById = async (id: number) => {
 
 // getTodosBySearch
 export const getTodosBySearch = async (keywords: string) => {
-  const supabase = createSupabaseBrowserClient();
+  const supabase = await createServerSideClient();
   const { data, error } = await supabase
-    .from("todos_no_rls")
+    .from("todos_with_rls")
     .select("*")
     .is("deleted_at", null)
     .like("content", `%${keywords}%`)
@@ -62,9 +64,9 @@ export const getTodosBySearch = async (keywords: string) => {
 
 // create todo
 export const createTodo = async (content: string) => {
-  const supabase = createSupabaseBrowserClient();
+  const supabase = await createServerSideClient();
   const { data, error } = await supabase
-    .from("todos_no_rls")
+    .from("todos_with_rls")
     .insert({
       content,
     })
@@ -80,9 +82,9 @@ export const createTodo = async (content: string) => {
 
 // update todo
 export const updateTodo = async (id: number, content: string) => {
-  const supabase = createSupabaseBrowserClient();
+  const supabase = await createServerSideClient();
   const { data, error } = await supabase
-    .from("todos_no_rls")
+    .from("todos_with_rls")
     .update({
       content,
       updated_at: new Date().toISOString(),
@@ -100,9 +102,9 @@ export const updateTodo = async (id: number, content: string) => {
 
 // complete todo
 export const completeTodo = async (id: number) => {
-  const supabase = createSupabaseBrowserClient();
+  const supabase = await createServerSideClient();
   const { data, error } = await supabase
-    .from("todos_no_rls")
+    .from("todos_with_rls")
     .update({
       completed_at: new Date().toISOString(),
     })
@@ -119,9 +121,9 @@ export const completeTodo = async (id: number) => {
 
 // un complete todo
 export const unCompleteTodo = async (id: number) => {
-  const supabase = createSupabaseBrowserClient();
+  const supabase = await createServerSideClient();
   const { data, error } = await supabase
-    .from("todos_no_rls")
+    .from("todos_with_rls")
     .update({
       completed_at: null,
     })
@@ -138,9 +140,9 @@ export const unCompleteTodo = async (id: number) => {
 
 // soft delete todo
 export const softDeleteTodo = async (id: number) => {
-  const supabase = createSupabaseBrowserClient();
+  const supabase = await createServerSideClient();
   const { data, error } = await supabase
-    .from("todos_no_rls")
+    .from("todos_with_rls")
     .update({
       deleted_at: new Date().toISOString(),
     })
@@ -157,16 +159,16 @@ export const softDeleteTodo = async (id: number) => {
 
 // hard delete todo
 // export const hardDeleteTodo = async (id: number) => {
-//   const supabase = createSupabaseBrowserClient();
-//   const { data, error } = await supabase
-//     .from("todos_no_rls")
+//   const supabase = await createServerSideClient();
+//   const result = await supabase
+//     .from("todos_with_rls")
 //     .delete()
 //     .eq("id", id);
 
-//   if (error) {
-//     console.error("Error delete todo:", error);
-//     return [];
-//   }
-
-//   return data;
+// if (error) {
+//   console.error("Error delete todo:", error);
+//   return [];
+// }
+//
+// return data;
 // };
